@@ -36,7 +36,7 @@ public class MainFrame extends UI {
         // USUNIECIE KANDYDATA
         Button candidateDelBtn = new Button("Usun kandydata");
         candidateDelBtn.addClickListener(e -> {
-            if(candidateGrid.getSelectedItems().isEmpty()) {
+            if (candidateGrid.getSelectedItems().isEmpty()) {
                 Notification.show("Wybierz kandydata ktorego chcesz usunac", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 // USUNIĘCIE WYBRANEGO KANDYDATA
@@ -49,7 +49,7 @@ public class MainFrame extends UI {
         // GENEROWANIE RAPORTU DLA DANEGO KANDYDATA
         Button candidateGenBtn = new Button("Wygeneruj raport");
         candidateGenBtn.addClickListener(e -> {
-            if(candidateGrid.getSelectedItems().isEmpty()) {
+            if (candidateGrid.getSelectedItems().isEmpty()) {
                 Notification.show("Wybierz kandydata ktorego chcesz usunac", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 // WYWOŁANIE GENEROWANIA RAPORTU DLA DANEGO KANDYDATA
@@ -77,6 +77,7 @@ public class MainFrame extends UI {
         TextField polishTf = new TextField("Wynik z polskiego (w %):");
         TextField mathTf = new TextField("Wynik z matematyki (w %):");
         TextField englishTf = new TextField("Wynik z angielskiego (w %):");
+        TextField emailTf = new TextField("Email: ");
 
         // DODANIE KANDYDATA
         Button candidateAddBtn = new Button("Dodaj kandydata");
@@ -89,9 +90,10 @@ public class MainFrame extends UI {
             Integer polish = Integer.valueOf(polishTf.getValue());
             Integer math = Integer.valueOf(mathTf.getValue());
             Integer english = Integer.valueOf(englishTf.getValue());
+            String email = emailTf.getValue().trim();
 
             // TODO OBSLUZENIE PRZYPADKU GDY PESEL JEST TEN SAM
-            if(!(checkScores(polish, math, english))) { // WYNIKI SPRAWDZENIE
+            if (!(checkScores(polish, math, english))) { // WYNIKI SPRAWDZENIE
                 Notification.show("Bledne wyniki", Notification.Type.HUMANIZED_MESSAGE);
             } else if (pesel.length() != 11) { // PESEL SPRAWDZENIE
                 Notification.show("Bledny pesel", Notification.Type.HUMANIZED_MESSAGE);
@@ -104,6 +106,7 @@ public class MainFrame extends UI {
                 candidate.setPolish(polish);
                 candidate.setMath(math);
                 candidate.setEnglish(english);
+                candidate.setEmail(email);
                 candidateServiceImpl.addCandidate(candidate);
 
                 // WYCZYSZCZENIE PÓL
@@ -113,6 +116,7 @@ public class MainFrame extends UI {
                 polishTf.setValue("");
                 mathTf.setValue("");
                 englishTf.setValue("");
+                emailTf.setValue("");
 
                 // AKTUALIZACJA TABELI
                 candidateGrid.setItems(candidateServiceImpl.getAllCandidates());
@@ -120,7 +124,7 @@ public class MainFrame extends UI {
         });
 
         // USTAWIENIA OKNA I DODANIE KOMPONENTÓW
-        subRoot.addComponents(nameTf, surnameTf, peselTf, polishTf, mathTf, englishTf, candidateAddBtn);
+        subRoot.addComponents(nameTf, surnameTf, peselTf, polishTf, mathTf, englishTf, emailTf, candidateAddBtn);
         candidateAddWindow.setContent(subRoot);
         candidateAddWindow.center();
         candidateAddWindow.setModal(true);
@@ -139,8 +143,8 @@ public class MainFrame extends UI {
 
     // SPRAWDZENIE WYNIKOW
     private boolean checkScores(Integer... values) {
-        for(Integer i : values) {
-            if(i > 100 || i < 0) {
+        for (Integer i : values) {
+            if (i > 100 || i < 0) {
                 return false;
             }
         }

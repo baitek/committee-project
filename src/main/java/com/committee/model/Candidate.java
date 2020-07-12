@@ -24,4 +24,5 @@ public class Candidate {
     private Integer polish;
     private Integer math;
     private Integer english;
+    private String email;
 }

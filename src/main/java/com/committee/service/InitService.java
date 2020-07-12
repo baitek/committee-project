@@ -15,9 +15,9 @@ public class InitService {
 
     @PostConstruct
     public void InitService() {
-        Candidate c1 = new Candidate(0l, "Maciej", "Kowalski", "123456789", 100, 100, 100);
-        Candidate c2 = new Candidate(0l, "Andrzej", "Nowak", "987654321", 80, 70, 80);
-        Candidate c3 = new Candidate(0l, "Kasia", "Mrotek", "456123789", 30, 46, 32);
+        Candidate c1 = new Candidate(0l, "Maciej", "Kowalski", "123456789", 100, 100, 100, "maciej@o2.pl");
+        Candidate c2 = new Candidate(0l, "Andrzej", "Nowak", "987654321", 80, 70, 80, "maciej@o2.pl");
+        Candidate c3 = new Candidate(0l, "Kasia", "Mrotek", "456123789", 30, 46, 32, "maciej@o2.pl");
 
         c1 = candidateRepository.save(c1);
         c2 = candidateRepository.save(c2);
