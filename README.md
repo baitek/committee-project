@@ -1,40 +1,25 @@
-Programowanie aplikacji internetowych - aplikacja dla komisji rekrutacyjnej
+# Programowanie aplikacji internetowych - aplikacja dla komisji rekrutacyjnej
 
-- wprowadzanie danych kandydatów - zrobione
-- tworzenie komunikatów o np. egzaminach (komisja egzaminacyjna)
-- drukowanie raportów
+## Założenia projektowe
 
-Pomysł na rozwiązanie drukowania raportów:
-- Wykorzystanie jaspersoft (dependency jasperreports)
-- Wykorzystanie parametru pesel dla stwierdzenie dla kogo drukować raport
-- Jeden raport dla danej osoby, jeden raport ogólny
+- wprowadzanie danych kandydatów - Bartosz Chajdas
+- tworzenie komunikatów o rozmowie kwalifikacyjnej - Angelika Krysztoforska
+- drukowanie raportów dla wszystkich oraz wybranego studenta - Kacper Duroł
 
-Dodatkowo kiedyś stare opisane objaśnienie kodu:
+## Proponowane rozwiązania
 
-Objaśnienie projektu:
+**Drukowanie raportów**
 
-Candidate.java - model kandydatów
+- Wykorzystanie Jaspersoft (dependency jasperreports jest już dodane)
+- Stworzenie dwóch metod:
+  - `generateReportAll()` - generuje raport dla wszystkich kandydatów
+  - `generateReport(String name, String surname, Integer id)` - generuje raport dla pojedynczego kandydata o nazwie `<imie>.<nazwisko>.pdf`
+- Dodanie nowych przycisków `Wygeneruj raport dla wszystkich` oraz `Wygeneruj raport dla zaznaczonego`. Pojedyncze zaznaczanie jest już ustawione.
 
-CandidateRepository.java - repozytorium dla kandydatów
+**Tworzenie komunikatów**
 
-CandidateController.java - niepotrzebne, do REST API
-
-CandidateService.java - metody do obsługi kandydata takie jak dodanie, usunięcie, generowanie raportu i wyszukanie
-
-InitService.java - tworzenie użytkowników na start
-
-MainFrame.java - UI, przyciski wywołujące metody, debiloodpornność
-
-application.properties - konfiguracja bazy danych
-
-hibernate.cfg.xml - niepotrzebne
-
-pom.xml - wszystkie zależności i importy
-
-Żeby działało: 
-
-Korzystałem z Intellij IDEA 2019.3, ale na innym raczej też zadziała oraz PostgreSQL
-
-Połączenie z bazą danych trzeba zmienić w plikach application.properties oraz CandidateService.java
-
-Należy też stworzyć bazę danych committeedb w pgAdmin
+- Dodanie przycisku aktywującym się w momencie zaznaczenia pojedynczego kandydata.
+- Przycisk otwierałby nowe okno, które zawiera:
+  1. pole z uzupełnionym mailem (nie aktywnym, nie możliwym do edycji). 
+  2. pole do napisania treści maila
+  3. przycisk wyślij, który wysyłałby maila z daną treścią oraz powiadamiał czy się to udało
