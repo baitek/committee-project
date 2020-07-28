@@ -43,8 +43,8 @@ public class CandidateServiceImpl implements CandidateService {
         candidateRepository.deleteById(id);
     }
 
-    public void generateReport(String name, String surname, String pesel) {
-        String reportPath = "src/main/resources/static/candidateReport.jrxml"; // TODO CREATE REPORT (USING JASPERSOFT) WITH PESEL PARAMETER
+    public void generateReport(String name, String surname, Long id) {
+        String reportPath = "src/main/resources/static/candidateReport.jrxml";
         String fileName = name + "." + surname;
         String destPath = "src/main/resources/static/" + fileName + ".pdf";
         File file = new File(destPath);
@@ -56,7 +56,7 @@ public class CandidateServiceImpl implements CandidateService {
 
         try (Connection conn = connect()) {
             Map<String, Object> map = new HashMap<>();
-            map.put("A", pesel);
+            map.put("A", id);
             JasperReport jr = JasperCompileManager.compileReport(reportPath);
             JasperPrint jp = JasperFillManager.fillReport(jr, map, conn);
             JasperExportManager.exportReportToPdfFile(jp, destPath);

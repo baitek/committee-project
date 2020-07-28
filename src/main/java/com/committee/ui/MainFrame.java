@@ -57,8 +57,8 @@ public class MainFrame extends UI {
                 Candidate candidate = candidateGrid.getSelectedItems().iterator().next();
                 String name = candidate.getName();
                 String surname = candidate.getSurname();
-                String pesel = candidate.getPesel();
-                candidateServiceImpl.generateReport(name, surname, pesel);
+                Long id = candidate.getId();
+                candidateServiceImpl.generateReport(name, surname, id);
             }
         });
 

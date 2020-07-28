@@ -9,5 +9,5 @@ public interface CandidateService {
     List<Candidate> getAllCandidates();
     Candidate getCandidate(Long id);
     void deleteCandidate(Long id);
-    void generateReport(String name, String surname, String pesel);
+    void generateReport(String name, String surname, Long id);
 }
