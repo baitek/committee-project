@@ -13,7 +13,6 @@ public class MainFrame extends UI {
     @Autowired
     private CandidateServiceImpl candidateServiceImpl;
 
-    // TODO POPRAWIC WYGLAD UI
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         /**
@@ -30,7 +29,7 @@ public class MainFrame extends UI {
 
         // KONTENER Z PRZYCISKAMI
         HorizontalLayout btnLayout = new HorizontalLayout();
-        btnLayout.setWidth("65%");
+        //btnLayout.setWidth("65%");
         btnLayout.setMargin(false);
 
         // USUNIECIE KANDYDATA
@@ -39,7 +38,6 @@ public class MainFrame extends UI {
             if (candidateGrid.getSelectedItems().isEmpty()) {
                 Notification.show("Wybierz kandydata ktorego chcesz usunac", Notification.Type.HUMANIZED_MESSAGE);
             } else {
-                // USUNIĘCIE WYBRANEGO KANDYDATA
                 Candidate candidate = candidateGrid.getSelectedItems().iterator().next();
                 candidateServiceImpl.deleteCandidate(candidate.getId());
                 candidateGrid.setItems(candidateServiceImpl.getAllCandidates());
@@ -52,32 +50,31 @@ public class MainFrame extends UI {
             if (candidateGrid.getSelectedItems().isEmpty()) {
                 Notification.show("Wybierz kandydata ktorego raport chcesz wygenerować", Notification.Type.HUMANIZED_MESSAGE);
             } else {
-                // WYWOŁANIE GENEROWANIA RAPORTU DLA DANEGO KANDYDATA
-                // TODO GENERACJA RAPORTU DLA DANEGO KANDYDATA
                 Candidate candidate = candidateGrid.getSelectedItems().iterator().next();
                 String name = candidate.getName();
                 String surname = candidate.getSurname();
                 Long id = candidate.getId();
                 candidateServiceImpl.oneCandidateReport(name, surname, id);
+                Notification.show("Wygenerowano raport dla " + name + " " + surname, Notification.Type.HUMANIZED_MESSAGE);
             }
         });
 
         // GENEROWANIE RAPORTU WSZYSTKICH KANDYDATÓW
-        Button candidateGenRap = new Button("Wygeneruj raport zbiorczy");
-        candidateGenRap.addClickListener(e -> {
+        Button candidatesGenBtn = new Button("Wygeneruj raport zbiorczy");
+        candidatesGenBtn.addClickListener(e -> {
             candidateServiceImpl.allCandidatesReport();
+            Notification.show("Wygenerowano raport zbiorczy", Notification.Type.HUMANIZED_MESSAGE);
         });
 
 
         /**
          * SUBWINDOW
          */
-
         // OKNO I GŁÓWNY KONTENER
         Window candidateAddWindow = new Window("Dodanie kandydata");
         VerticalLayout subRoot = new VerticalLayout();
 
-        // TEXTFIELDY DO INSERTOW
+        // POLA TEKSTOWE DO WYPEŁNIENIA
         TextField nameTf = new TextField("Imie:");
         TextField surnameTf = new TextField("Nazwisko:");
         TextField peselTf = new TextField("Pesel:");
@@ -99,7 +96,6 @@ public class MainFrame extends UI {
             Integer english = Integer.valueOf(englishTf.getValue());
             String email = emailTf.getValue().trim();
 
-            // TODO OBSLUZENIE PRZYPADKU GDY PESEL JEST TEN SAM
             if (!(checkScores(polish, math, english))) { // WYNIKI SPRAWDZENIE
                 Notification.show("Bledne wyniki", Notification.Type.HUMANIZED_MESSAGE);
             } else if (pesel.length() != 11) { // PESEL SPRAWDZENIE
@@ -143,7 +139,7 @@ public class MainFrame extends UI {
         });
 
         // DODANIE KOMPONENTOW DO KONTENEROW I GLOWNEGO OKNA
-        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn, candidateGenRap);
+        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn, candidatesGenBtn);
         mainRoot.addComponents(candidateGrid, btnLayout);
         setContent(mainRoot);
     }
