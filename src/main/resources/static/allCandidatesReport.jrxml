@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.13.0.final using JasperReports Library version 6.13.0-46ada4d1be8f3c5985fd0b6146f3ed44caed6f05  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8d665de2-5d04-4708-9aba-29256c1a802b">
+    <property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+    <queryString language="SQL">
+        <![CDATA[SELECT * FROM candidate]]>
+    </queryString>
+    <field name="id" class="java.lang.Long">
+        <property name="com.jaspersoft.studio.field.label" value="id"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="name" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="name"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="surname" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="surname"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="math" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="math"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="polish" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="polish"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="english" class="java.lang.Integer">
+        <property name="com.jaspersoft.studio.field.label" value="english"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="email" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="email"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <field name="pesel" class="java.lang.String">
+        <property name="com.jaspersoft.studio.field.label" value="pesel"/>
+        <property name="com.jaspersoft.studio.field.tree.path" value="candidate"/>
+    </field>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="52" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="-10" width="560" height="61" uuid="e5027886-7a78-4740-a181-b92502895cd9"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="22" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Raport zbiorczy wszystkich kandydatów"]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="19" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="41" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="9" width="596" height="22" uuid="d8728b4f-e6ae-4db7-b5cf-beba0f6f17c0">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="696a4bdd-dddc-4ee2-bb5b-3abba70bb732"/>
+                </reportElement>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Imie i nazwisko  |  matematyka |  j.polski  |  j.angielski  |    adres email    |       pesel]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="170" y="7" width="100" height="30" uuid="6b12a4e2-839c-44ea-be93-a55ea2434973">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0a3d125d-0f51-40d9-88c4-72c3c517fed7"/>
+                </reportElement>
+                <textElement>
+                    <font size="14" isBold="true"/>
+                </textElement>
+                <text><![CDATA[]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="36" splitType="Stretch">
+            <textField>
+                <reportElement x="-1" y="5" width="160" height="25" uuid="9a3d1a0a-6a5e-4b6e-9c9b-71ad6820660a">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="34822779-27d0-41f2-abf0-6e9ad285a290"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{id} + ". " + $F{name} + " " + $F{surname}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="120" y="5" width="100" height="30" uuid="be27534c-f868-4f96-abe2-d348eaba5a21">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0a3d125d-0f51-40d9-88c4-72c3c517fed7"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{math} + "%"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="195" y="5" width="100" height="30" uuid="2d3fd3c2-5619-489f-97d7-dfbb4df9202b">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="975addcb-7e00-4dff-9086-fadd4c913fc0"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{polish} + "%"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="267" y="5" width="100" height="30" uuid="12eff0c8-8e10-491e-ac4b-6076d5e442a0">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9daa9574-30ff-4b76-9c68-59cd96a138b5"/>
+                </reportElement>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{english} + "%"]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="374" y="5" width="100" height="30" uuid="ddf7b838-b6aa-4336-a78d-05a71d886f5f">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5cf2d5bb-caea-4c8a-9ed7-22c8defaaeed"/>
+                </reportElement>
+                <textElement>
+                    <font size="14" isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="484" y="5" width="100" height="30" uuid="d42694b8-0492-4c73-95fe-2186814b93dd">
+                    <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="42d1f578-34d0-4ad6-bf20-3065defbc954"/>
+                </reportElement>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{pesel}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

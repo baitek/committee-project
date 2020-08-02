@@ -30,7 +30,7 @@ public class MainFrame extends UI {
 
         // KONTENER Z PRZYCISKAMI
         HorizontalLayout btnLayout = new HorizontalLayout();
-        btnLayout.setWidth("50%");
+        btnLayout.setWidth("65%");
         btnLayout.setMargin(false);
 
         // USUNIECIE KANDYDATA
@@ -47,10 +47,10 @@ public class MainFrame extends UI {
         });
 
         // GENEROWANIE RAPORTU DLA DANEGO KANDYDATA
-        Button candidateGenBtn = new Button("Wygeneruj raport");
+        Button candidateGenBtn = new Button("Wygeneruj raport indywidualny");
         candidateGenBtn.addClickListener(e -> {
             if (candidateGrid.getSelectedItems().isEmpty()) {
-                Notification.show("Wybierz kandydata ktorego chcesz usunac", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show("Wybierz kandydata ktorego raport chcesz wygenerować", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 // WYWOŁANIE GENEROWANIA RAPORTU DLA DANEGO KANDYDATA
                 // TODO GENERACJA RAPORTU DLA DANEGO KANDYDATA
@@ -58,9 +58,16 @@ public class MainFrame extends UI {
                 String name = candidate.getName();
                 String surname = candidate.getSurname();
                 Long id = candidate.getId();
-                candidateServiceImpl.generateReport(name, surname, id);
+                candidateServiceImpl.oneCandidateReport(name, surname, id);
             }
         });
+
+        // GENEROWANIE RAPORTU WSZYSTKICH KANDYDATÓW
+        Button candidateGenRap = new Button("Wygeneruj raport zbiorczy");
+        candidateGenRap.addClickListener(e -> {
+            candidateServiceImpl.allCandidatesReport();
+        });
+
 
         /**
          * SUBWINDOW
@@ -136,7 +143,7 @@ public class MainFrame extends UI {
         });
 
         // DODANIE KOMPONENTOW DO KONTENEROW I GLOWNEGO OKNA
-        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn);
+        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn, candidateGenRap);
         mainRoot.addComponents(candidateGrid, btnLayout);
         setContent(mainRoot);
     }

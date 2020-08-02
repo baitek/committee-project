@@ -43,7 +43,7 @@ public class CandidateServiceImpl implements CandidateService {
         candidateRepository.deleteById(id);
     }
 
-    public void generateReport(String name, String surname, Long id) {
+    public void oneCandidateReport(String name, String surname, Long id) {
         String reportPath = "src/main/resources/static/candidateReport.jrxml";
         String fileName = name + "." + surname;
         String destPath = "src/main/resources/static/" + fileName + ".pdf";
@@ -57,6 +57,27 @@ public class CandidateServiceImpl implements CandidateService {
         try (Connection conn = connect()) {
             Map<String, Object> map = new HashMap<>();
             map.put("A", id);
+            JasperReport jr = JasperCompileManager.compileReport(reportPath);
+            JasperPrint jp = JasperFillManager.fillReport(jr, map, conn);
+            JasperExportManager.exportReportToPdfFile(jp, destPath);
+        } catch (Exception ex) {
+            ex.printStackTrace(); // TODO HANDLE THE EXCEPTION
+        }
+    }
+
+    public void allCandidatesReport() {
+        String reportPath = "src/main/resources/static/allCandidatesReport.jrxml";
+        String fileName = "Raport.zbiorczy";
+        String destPath = "src/main/resources/static/" + fileName + ".pdf";
+        File file = new File(destPath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace(); // TODO HANDLE THE EXCEPTION
+        }
+
+        try (Connection conn = connect()) {
+            Map<String, Object> map = new HashMap<>();
             JasperReport jr = JasperCompileManager.compileReport(reportPath);
             JasperPrint jp = JasperFillManager.fillReport(jr, map, conn);
             JasperExportManager.exportReportToPdfFile(jp, destPath);
