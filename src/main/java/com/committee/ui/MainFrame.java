@@ -7,20 +7,24 @@ import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.stream.Collectors;
+
 @SpringUI()
 public class MainFrame extends UI {
 
     @Autowired
     private CandidateServiceImpl candidateServiceImpl;
 
+    private String toEmail;
+
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         /**
-         * GLOWNE OKNO
+         * GLÓWNE OKNO
          */
         // GLOWNY KONTENER
-        VerticalLayout mainRoot = new VerticalLayout();
-        mainRoot.setSizeFull();
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setSizeFull();
 
         // TABELA Z KANDYDATAMI
         Grid<Candidate> candidateGrid = new Grid<>(Candidate.class);
@@ -29,7 +33,6 @@ public class MainFrame extends UI {
 
         // KONTENER Z PRZYCISKAMI
         HorizontalLayout btnLayout = new HorizontalLayout();
-        //btnLayout.setWidth("65%");
         btnLayout.setMargin(false);
 
         // USUNIECIE KANDYDATA
@@ -48,7 +51,7 @@ public class MainFrame extends UI {
         Button candidateGenBtn = new Button("Wygeneruj raport indywidualny");
         candidateGenBtn.addClickListener(e -> {
             if (candidateGrid.getSelectedItems().isEmpty()) {
-                Notification.show("Wybierz kandydata ktorego raport chcesz wygenerować", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show("Wybierz kandydata dla ktorego raport chcesz wygenerować", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 Candidate candidate = candidateGrid.getSelectedItems().iterator().next();
                 String name = candidate.getName();
@@ -66,13 +69,14 @@ public class MainFrame extends UI {
             Notification.show("Wygenerowano raport zbiorczy", Notification.Type.HUMANIZED_MESSAGE);
         });
 
-
         /**
-         * SUBWINDOW
+         * SUBWINDOW ADD CANDIDATE
          */
-        // OKNO I GŁÓWNY KONTENER
         Window candidateAddWindow = new Window("Dodanie kandydata");
-        VerticalLayout subRoot = new VerticalLayout();
+        VerticalLayout candidateAddLayout = new VerticalLayout();
+        candidateAddWindow.setContent(candidateAddLayout);
+        candidateAddWindow.center();
+        candidateAddWindow.setModal(true);
 
         // POLA TEKSTOWE DO WYPEŁNIENIA
         TextField nameTf = new TextField("Imie:");
@@ -86,8 +90,6 @@ public class MainFrame extends UI {
         // DODANIE KANDYDATA
         Button candidateAddBtn = new Button("Dodaj kandydata");
         candidateAddBtn.addClickListener(e -> {
-
-            // PRZYPISANIE WARTOSCI PÓL DO ZMIENNYCH
             String name = nameTf.getValue().trim();
             String surname = surnameTf.getValue().trim();
             String pesel = peselTf.getValue().trim();
@@ -96,12 +98,11 @@ public class MainFrame extends UI {
             Integer english = Integer.valueOf(englishTf.getValue());
             String email = emailTf.getValue().trim();
 
-            if (!(checkScores(polish, math, english))) { // WYNIKI SPRAWDZENIE
+            if (!(checkScores(polish, math, english))) {
                 Notification.show("Bledne wyniki", Notification.Type.HUMANIZED_MESSAGE);
-            } else if (pesel.length() != 11) { // PESEL SPRAWDZENIE
+            } else if (pesel.length() != 11) {
                 Notification.show("Bledny pesel", Notification.Type.HUMANIZED_MESSAGE);
             } else {
-                // DODANIE KANDYDATA
                 Candidate candidate = new Candidate();
                 candidate.setName(name);
                 candidate.setSurname(surname);
@@ -112,7 +113,6 @@ public class MainFrame extends UI {
                 candidate.setEmail(email);
                 candidateServiceImpl.addCandidate(candidate);
 
-                // WYCZYSZCZENIE PÓL
                 nameTf.setValue("");
                 surnameTf.setValue("");
                 peselTf.setValue("");
@@ -121,27 +121,63 @@ public class MainFrame extends UI {
                 englishTf.setValue("");
                 emailTf.setValue("");
 
-                // AKTUALIZACJA TABELI
                 candidateGrid.setItems(candidateServiceImpl.getAllCandidates());
             }
         });
 
-        // USTAWIENIA OKNA I DODANIE KOMPONENTÓW
-        subRoot.addComponents(nameTf, surnameTf, peselTf, polishTf, mathTf, englishTf, emailTf, candidateAddBtn);
-        candidateAddWindow.setContent(subRoot);
-        candidateAddWindow.center();
-        candidateAddWindow.setModal(true);
+        candidateAddLayout.addComponents(nameTf, surnameTf, peselTf, polishTf, mathTf, englishTf, emailTf, candidateAddBtn);
 
-        // PRZYCISK OTWIERAJACY SUBWINDOW
         Button candidateAddWindowBtn = new Button("Dodaj kandydata");
         candidateAddWindowBtn.addClickListener(e -> {
             addWindow(candidateAddWindow);
         });
 
+        /**
+         * SUBWINDOW NOTIFY CANDIDATE
+         */
+        // OKNO I GŁÓWNY KONTENER
+        Window candidateNotifyWindow = new Window("Powiadomienie kandydata");
+        VerticalLayout candidateNotifyLayout = new VerticalLayout();
+        candidateNotifyWindow.setContent(candidateNotifyLayout);
+        candidateNotifyWindow.center();
+        candidateNotifyWindow.setModal(true);
+
+        TextField toEmailTf = new TextField("To: ");
+        toEmailTf.setEnabled(false);
+
+        TextField subjectTf = new TextField("Tytuł: ");
+
+        TextField textTf = new TextField("Tekst: ");
+
+        Button sendEmailBtn = new Button("Wyślij wiadomość");
+        sendEmailBtn.addClickListener(e -> {
+            if(subjectTf.getValue().isEmpty()) {
+                Notification.show("Proszę uzupełnić temat maila", Notification.Type.HUMANIZED_MESSAGE);
+            } else {
+                candidateServiceImpl.notifyCandidate(toEmail, subjectTf.getValue(), textTf.getValue());
+
+                Notification.show("Mail został wysłany", Notification.Type.HUMANIZED_MESSAGE);
+            }
+        });
+
+        candidateNotifyLayout.addComponents(toEmailTf, subjectTf, textTf, sendEmailBtn);
+
+        Button candidateNotifyWindowBtn = new Button("Powiadom kandydata");
+        candidateNotifyWindowBtn.addClickListener(e -> {
+            if (candidateGrid.getSelectedItems().isEmpty()) {
+                Notification.show("Wybierz kandydata którego chcesz powiadomić", Notification.Type.HUMANIZED_MESSAGE);
+            } else {
+                Candidate candidate = candidateGrid.getSelectedItems().iterator().next();
+                toEmail = candidate.getEmail().trim();
+                toEmailTf.setValue(toEmail);
+                addWindow(candidateNotifyWindow);
+            }
+        });
+
         // DODANIE KOMPONENTOW DO KONTENEROW I GLOWNEGO OKNA
-        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn, candidatesGenBtn);
-        mainRoot.addComponents(candidateGrid, btnLayout);
-        setContent(mainRoot);
+        btnLayout.addComponents(candidateAddWindowBtn, candidateDelBtn, candidateGenBtn, candidatesGenBtn, candidateNotifyWindowBtn);
+        mainLayout.addComponents(candidateGrid, btnLayout);
+        setContent(mainLayout);
     }
 
     // SPRAWDZENIE WYNIKOW
@@ -153,4 +189,5 @@ public class MainFrame extends UI {
         }
         return true;
     }
+
 }

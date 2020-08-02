@@ -11,4 +11,5 @@ public interface CandidateService {
     void deleteCandidate(Long id);
     void oneCandidateReport(String name, String surname, Long id);
     void allCandidatesReport();
+    void notifyCandidate(String toEmail, String subject, String text);
 }
