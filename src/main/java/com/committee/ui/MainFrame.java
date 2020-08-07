@@ -137,30 +137,35 @@ public class MainFrame extends UI {
          */
         // OKNO I GŁÓWNY KONTENER
         Window candidateNotifyWindow = new Window("Powiadomienie kandydata");
+        candidateNotifyWindow.setHeight("500px");
+        candidateNotifyWindow.setWidth("800px");
         VerticalLayout candidateNotifyLayout = new VerticalLayout();
         candidateNotifyWindow.setContent(candidateNotifyLayout);
         candidateNotifyWindow.center();
         candidateNotifyWindow.setModal(true);
 
         TextField toEmailTf = new TextField("To: ");
+        toEmailTf.setSizeFull();
         toEmailTf.setEnabled(false);
 
         TextField subjectTf = new TextField("Tytuł: ");
+        subjectTf.setSizeFull();
 
-        TextField textTf = new TextField("Tekst: ");
+        TextArea textTa = new TextArea("Tekst: ");
+        textTa.setSizeFull();
 
         Button sendEmailBtn = new Button("Wyślij wiadomość");
         sendEmailBtn.addClickListener(e -> {
             if(subjectTf.getValue().isEmpty()) {
                 Notification.show("Proszę uzupełnić temat maila", Notification.Type.HUMANIZED_MESSAGE);
             } else {
-                candidateServiceImpl.notifyCandidate(toEmail, subjectTf.getValue(), textTf.getValue());
+                candidateServiceImpl.notifyCandidate(toEmail, subjectTf.getValue(), textTa.getValue());
 
                 Notification.show("Mail został wysłany", Notification.Type.HUMANIZED_MESSAGE);
             }
         });
 
-        candidateNotifyLayout.addComponents(toEmailTf, subjectTf, textTf, sendEmailBtn);
+        candidateNotifyLayout.addComponents(toEmailTf, subjectTf, textTa, sendEmailBtn);
 
         Button candidateNotifyWindowBtn = new Button("Powiadom kandydata");
         candidateNotifyWindowBtn.addClickListener(e -> {
