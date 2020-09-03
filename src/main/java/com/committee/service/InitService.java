@@ -4,7 +4,6 @@ import com.committee.model.Candidate;
 import com.committee.repository.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 
 @Service

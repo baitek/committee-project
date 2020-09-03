@@ -5,7 +5,6 @@ import com.committee.repository.CandidateRepository;
 import net.sf.jasperreports.engine.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -79,7 +78,7 @@ public class CandidateServiceImpl implements CandidateService {
         try {
             file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace(); // TODO HANDLE THE EXCEPTION
+            e.printStackTrace();
         }
 
         try (Connection conn = connect()) {
@@ -88,7 +87,7 @@ public class CandidateServiceImpl implements CandidateService {
             JasperPrint jp = JasperFillManager.fillReport(jr, map, conn);
             JasperExportManager.exportReportToPdfFile(jp, destPath);
         } catch (Exception ex) {
-            ex.printStackTrace(); // TODO HANDLE THE EXCEPTION
+            ex.printStackTrace();
         }
     }
 

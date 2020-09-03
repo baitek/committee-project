@@ -2,12 +2,11 @@ package com.committee.ui;
 
 import com.committee.model.Candidate;
 import com.committee.service.CandidateServiceImpl;
+import com.vaadin.annotations.StyleSheet;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.stream.Collectors;
 
 @SpringUI()
 public class MainFrame extends UI {
@@ -93,15 +92,15 @@ public class MainFrame extends UI {
             String name = nameTf.getValue().trim();
             String surname = surnameTf.getValue().trim();
             String pesel = peselTf.getValue().trim();
-            Integer polish = Integer.valueOf(polishTf.getValue());
-            Integer math = Integer.valueOf(mathTf.getValue());
-            Integer english = Integer.valueOf(englishTf.getValue());
+            Integer polish = Integer.valueOf(polishTf.getValue().trim());
+            Integer math = Integer.valueOf(mathTf.getValue().trim());
+            Integer english = Integer.valueOf(englishTf.getValue().trim());
             String email = emailTf.getValue().trim();
 
             if (!(checkScores(polish, math, english))) {
-                Notification.show("Bledne wyniki", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show("Prosze podac wynik w procentach (0-100)", Notification.Type.HUMANIZED_MESSAGE);
             } else if (pesel.length() != 11) {
-                Notification.show("Bledny pesel", Notification.Type.HUMANIZED_MESSAGE);
+                Notification.show("PESEL musi miec 11 cyfr", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 Candidate candidate = new Candidate();
                 candidate.setName(name);
@@ -156,8 +155,10 @@ public class MainFrame extends UI {
 
         Button sendEmailBtn = new Button("Wyślij wiadomość");
         sendEmailBtn.addClickListener(e -> {
-            if(subjectTf.getValue().isEmpty()) {
+            if (subjectTf.getValue().isEmpty()) {
                 Notification.show("Proszę uzupełnić temat maila", Notification.Type.HUMANIZED_MESSAGE);
+            } else if (textTa.getValue().isEmpty()) {
+                Notification.show("Proszę uzupełnić treść maila", Notification.Type.HUMANIZED_MESSAGE);
             } else {
                 candidateServiceImpl.notifyCandidate(toEmail, subjectTf.getValue(), textTa.getValue());
 
