@@ -58,6 +58,7 @@ public class MainFrame extends UI {
                 Long id = candidate.getId();
                 candidateServiceImpl.oneCandidateReport(name, surname, id);
                 Notification.show("Wygenerowano raport dla " + name + " " + surname, Notification.Type.HUMANIZED_MESSAGE);
+                getUI().getPage().open("http://localhost:8080/api/candidates/pdf/" + id, "_blank");
             }
         });
 
@@ -66,6 +67,7 @@ public class MainFrame extends UI {
         candidatesGenBtn.addClickListener(e -> {
             candidateServiceImpl.allCandidatesReport();
             Notification.show("Wygenerowano raport zbiorczy", Notification.Type.HUMANIZED_MESSAGE);
+            getUI().getPage().open("http://localhost:8080/api/candidates/pdf/all", "_blank");
         });
 
         /**

@@ -50,7 +50,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     public void oneCandidateReport(String name, String surname, Long id) {
         String reportPath = "src/main/resources/static/candidateReport.jrxml";
-        String fileName = name + "." + surname;
+        String fileName = (name + "-" + surname).toLowerCase();
         String destPath = "src/main/resources/static/" + fileName + ".pdf";
         File file = new File(destPath);
         try {
@@ -72,7 +72,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     public void allCandidatesReport() {
         String reportPath = "src/main/resources/static/allCandidatesReport.jrxml";
-        String fileName = "Raport.zbiorczy";
+        String fileName = "raport-zbiorczy";
         String destPath = "src/main/resources/static/" + fileName + ".pdf";
         File file = new File(destPath);
         try {

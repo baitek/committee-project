@@ -2,9 +2,13 @@ package com.committee.controller;
 
 import com.committee.model.Candidate;
 import com.committee.service.CandidateService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -51,6 +55,31 @@ public class CandidateController {
             newCandidate.setId(id);
             candidateService.addCandidate(newCandidate);
         }
+    }
+
+    @GetMapping(
+            value = "/candidates/pdf/all",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public @ResponseBody byte[] getAllPdf() throws IOException {
+        InputStream in = getClass()
+                .getClassLoader()
+                .getResourceAsStream("static/raport-zbiorczy.pdf");
+        return IOUtils.toByteArray(in);
+    }
+
+    @GetMapping(
+            value = "/candidates/pdf/{id}",
+            produces = MediaType.APPLICATION_PDF_VALUE
+    )
+    public @ResponseBody byte[] getOnePdf(@PathVariable Long id) throws IOException {
+        Candidate candidate = candidateService.getCandidate(id);
+        String fileName = (candidate.getName() + "-" + candidate.getSurname()).toLowerCase();
+
+        InputStream in = getClass()
+                .getClassLoader()
+                .getResourceAsStream("static/" + fileName + ".pdf");
+        return IOUtils.toByteArray(in);
     }
 
 }
